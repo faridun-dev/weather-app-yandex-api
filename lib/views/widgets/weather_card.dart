@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class WeatherCard extends StatefulWidget {
   final String hour;
-  final String temp;
+  final int temp;
   final String condition;
   final IconData conditionIcon;
   final Color conditionIconColor;
@@ -40,7 +40,7 @@ class _WeatherCardState extends State<WeatherCard> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  widget.hour,
+                  "${widget.hour}:00",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 40,
@@ -48,7 +48,7 @@ class _WeatherCardState extends State<WeatherCard> {
                 ),
                 const Spacer(),
                 Text(
-                  widget.temp,
+                  "${widget.temp}",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 40,

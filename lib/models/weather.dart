@@ -2,7 +2,7 @@ class Weather {
   final String cityName;
   final String condition;
   final String temp;
-  final List<Map> hours;
+  final List<dynamic> hours;
   final String date;
 
   Weather({
@@ -17,8 +17,8 @@ class Weather {
     return Weather(
       cityName: json["info"]["tzinfo"]["name"] as String,
       condition: json["fact"]["condition"] as String,
-      temp: json["fact"]["temp"] as String,
-      hours: json["forecasts"][0]["hours"] as List<Map>,
+      temp: json["fact"]["temp"].toString(),
+      hours: json["forecasts"][0]["hours"] as List<dynamic>,
       date: json["forecasts"][0]["date"] as String,
     );
   }
