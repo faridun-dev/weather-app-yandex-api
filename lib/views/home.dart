@@ -3,6 +3,7 @@ import 'package:weather_app_yandex_api/models/weather.api.dart';
 import 'package:weather_app_yandex_api/models/weather.dart';
 import 'package:weather_app_yandex_api/views/widgets/weather_card.dart';
 import 'package:weather_icons/weather_icons.dart';
+import 'package:string_extensions/string_extensions.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,6 +21,46 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  IconData getWeatherIcon(String condition) {
+    switch (condition.toLowerCase()) {
+      case "clear":
+        return WeatherIcons.day_sunny;
+      case "cloudy":
+        return WeatherIcons.cloud;
+      case "rain":
+        return WeatherIcons.rain;
+      case "snow":
+        return WeatherIcons.snow;
+      case "thunderstorm":
+        return WeatherIcons.thunderstorm;
+      case "fog":
+        return WeatherIcons.fog;
+      default:
+        return WeatherIcons.day_sunny_overcast; // Default icon
+    }
+  }
+
+  Color getWeatherIconColor(String condition) {
+    switch (condition.toLowerCase()) {
+      case "clear":
+        return Colors.amber;
+      case "cloudy":
+        return Colors.blue;
+      case "rain":
+        return Colors.blue;
+      case "snow":
+        return Colors.white;
+      case "thunderstorm":
+        return Colors.yellow;
+      case "fog":
+        return Colors.white;
+      case "partly-cloudy":
+        return Colors.blue.shade600;
+      default:
+        return Colors.amber;
+    }
   }
 
   @override
@@ -73,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              _weather.condition,
+                              _weather.condition.capitalize,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 40,
@@ -82,9 +123,11 @@ class _HomePageState extends State<HomePage> {
                             const SizedBox(
                               width: 10,
                             ),
-                            const Icon(
-                              WeatherIcons.day_sunny,
-                              color: Colors.yellow,
+                            Icon(
+                              getWeatherIcon(
+                                _weather.condition,
+                              ),
+                              color: getWeatherIconColor(_weather.condition),
                             ),
                           ],
                         ),
@@ -97,8 +140,10 @@ class _HomePageState extends State<HomePage> {
                               hour: _weather.hours[index]["hour"],
                               temp: _weather.hours[index]["temp"],
                               condition: _weather.hours[index]["condition"],
-                              conditionIcon: WeatherIcons.cloud,
-                              conditionIconColor: Colors.blue,
+                              conditionIcon: getWeatherIcon(
+                                  _weather.hours[index]["condition"]),
+                              conditionIconColor: getWeatherIconColor(
+                                  _weather.hours[index]["condition"]),
                             );
                           }),
                         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:string_extensions/string_extensions.dart';
 
 class WeatherCard extends StatefulWidget {
   final String hour;
@@ -48,7 +49,7 @@ class _WeatherCardState extends State<WeatherCard> {
                 ),
                 const Spacer(),
                 Text(
-                  "${widget.temp}",
+                  "${widget.temp}°C",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 40,
@@ -60,7 +61,7 @@ class _WeatherCardState extends State<WeatherCard> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  widget.condition,
+                  widget.condition.capitalize,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 40,
