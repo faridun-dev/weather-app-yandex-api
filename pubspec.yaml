@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  geocoding: ^3.0.0
+  geolocator: ^13.0.1
   http: ^1.2.2
   string_extensions: ^0.7.3
   weather_icons: ^3.0.0

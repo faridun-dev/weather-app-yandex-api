@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:weather_app_yandex_api/models/weather.api.dart';
 import 'package:weather_app_yandex_api/models/weather.dart';
 import 'package:weather_app_yandex_api/views/widgets/weather_card.dart';
@@ -15,12 +16,36 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late Weather _weather;
   bool _isLoading = true;
+  Position? _currentPosition;
 
-  Future<void> getWeather() async {
-    _weather = await WeatherApi().getWeather("38.5598", "68.7870");
-    setState(() {
-      _isLoading = false;
+  Future<void> _getCurrentPosition() async {
+    final hasPermission = await _handleLocationPermission();
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    ).then((Position position) {
+      setState(() {
+        _currentPosition = position;
+      });
+      print(_currentPosition);
+    }).catchError((e) {
+      debugPrint(e);
     });
+  }
+
+  Future<void> _getWeather() async {
+    try {
+      _weather = await WeatherApi().getWeather(
+        _currentPosition!.latitude.toString(),
+        _currentPosition!.longitude.toString(),
+      );
+      print(_weather.cityName);
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      print("Error: $e");
+    }
   }
 
   IconData getWeatherIcon(String condition) {
@@ -63,10 +88,46 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _initialize() async {
+    await _getCurrentPosition();
+    if (_currentPosition != null) {
+      await _getWeather();
+    }
+  }
+
   @override
   void initState() {
-    getWeather();
     super.initState();
+    _initialize();
   }
 
   @override
@@ -89,7 +150,7 @@ class _HomePageState extends State<HomePage> {
               child: CircularProgressIndicator(),
             )
           : RefreshIndicator(
-              onRefresh: getWeather,
+              onRefresh: _getWeather,
               child: ListView(
                 children: [
                   Padding(

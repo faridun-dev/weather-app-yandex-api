@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weather_app_yandex_api/views/home.dart';
 
 void main() {
+  WidgetsFlutterBinding();
   runApp(const MainApp());
 }
 
