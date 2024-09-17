@@ -51,7 +51,7 @@ class _WeatherCardState extends State<WeatherCard> {
                 Text(
                   "${widget.temp}°C",
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: Colors.white,  
                     fontSize: 40,
                   ),
                 ),
