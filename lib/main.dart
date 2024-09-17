@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app_yandex_api/views/home.dart';
+import 'package:weather_app_yandex_api/views/screens/home.dart';
 
 void main() {
   WidgetsFlutterBinding();

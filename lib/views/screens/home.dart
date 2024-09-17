@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:weather_app_yandex_api/models/weather.api.dart';
+import 'package:weather_app_yandex_api/services/weather_service.dart';
 import 'package:weather_app_yandex_api/models/weather.dart';
 import 'package:weather_app_yandex_api/views/widgets/weather_card.dart';
 import 'package:weather_icons/weather_icons.dart';
